@@ -1,61 +1,286 @@
 <!DOCTYPE html>
-<html>
+<!-- 文档类型声明，使用HTML5标准 -->
+<html lang="zh-CN">
+<!-- 设置网页语言为中文 -->
 
 <head>
-<meta charset="utf-8"><!--定义网页编码格式为 utf-8-->
-<title>123456</title><!---->
+  <meta charset="utf-8">
+  <!-- 设置字符编码为UTF-8，支持中文显示 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 视口设置，使网页适配移动设备 -->
+  <title>植物养护指南</title>
+  <!-- 网页标题 -->
+  
+  <style>
+    /* CSS样式部分 */ 
+    /* 定义CSS变量，统一管理和修改 */
+    :root {
+      --primary-color: #4CAF50;      /* 主色调 - 绿色 */
+      --secondary-color: #2E7D32;    /* 辅助色 - 深绿色 */
+      --text-color: #333;            /* 主要文字颜色 */
+      --light-gray: #f5f5f5;         /* 浅灰色背景 */
+      --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 卡片阴影效果 */
+    }
+    
+    /* 全局body样式 */
+    body {
+      margin: 0;                        /* 去除默认边距 */
+      min-height: 100vh;                /* 最小高度为视口高度 */
+      font-family: 'Arial', sans-serif; /* 字体设置 */
+      color: var(--text-color);         /* 文字颜色 */
+      background-color: #f9f9f9;      /* 背景颜色 */
+      line-height: 1.6;                 /* 行高 */
+    }
+    
+    /* 主容器样式 */
+    .container {
+      max-width: 1200px;           /* 最大宽度 */
+      margin: 0 auto;              /* 水平居中 */
+      padding: 20px;               /* 内边距 */
+    }
+    
+    /* 头部图片区域样式 */
+    .header-image {
+      position: relative;          /* 相对定位 */
+      height: 300px;               /* 固定高度 */
+      overflow: hidden;            /* 隐藏溢出内容 */
+      margin-bottom: 30px;         /* 底部外边距 */
+      border-radius: 8px;          /* 圆角边框 */
+    }
+    
+    /* 头部图片样式 */
+    .header-image img {
+      width: 100%;                /* 宽度100% */
+      height: 100%;               /* 高度100% */
+      object-fit: cover;          /* 图片填充方式 */
+      filter: brightness(0.7);    /* 图片亮度调节 */
+    }
+    
+    /* 头部标题文字样式 */
+    .header-image h1 {
+      position: absolute;         /* 绝对定位 */
+      top: 50%;                   /* 垂直居中 */
+      left: 50%;                  /* 水平居中 */
+      transform: translate(-50%, -50%); /* 精确居中 */
+      color: white;             /* 文字颜色 */
+      font-size: 3rem;            /* 字体大小 */
+      text-align: center;         /* 文字居中 */
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.5); /* 文字阴影 */
+      width: 100%;                /* 宽度100% */
+    }
+    
+    /* 搜索容器样式 */
+    .search-container {
+      display: flex;              /* 弹性布局 */
+      justify-content: center;    /* 水平居中 */
+      margin-bottom: 30px;        /* 底部外边距 */
+    }
+    
+    /* 搜索框样式 */
+    .search-box {
+      width: 100%;                /* 宽度100% */
+      max-width: 600px;           /* 最大宽度 */
+      padding: 12px 20px;         /* 内边距 */
+      border: 2px solid var(--primary-color); /* 边框 */
+      border-radius: 30px;        /* 圆角边框 */
+      font-size: 16px;            /* 字体大小 */
+      outline: none;              /* 去除轮廓线 */
+      transition: all 0.3s ease;  /* 过渡效果 */
+    }
+    
+    /* 搜索框聚焦状态样式 */
+    .search-box:focus {
+      border-color: var(--secondary-color); /* 边框颜色变化 */
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.3); /* 阴影效果 */
+    }
+    
+    /* 植物列表容器样式 */
+    .plant-list {
+      display: flex;             /* 弹性布局 */
+      flex-direction: column;    /* 垂直排列 */
+      gap: 20px;                 /* 项目间距 */
+    }
+    
+    /* 植物卡片样式 */
+    .plant-card {
+      background-color: white;      /* 背景色 */
+      border-radius: 8px;             /* 圆角 */
+      padding: 20px;                  /* 内边距 */
+      box-shadow: var(--card-shadow); /* 阴影 */
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* 过渡效果 */
+    }
+    
+    /* 植物卡片悬停效果 */
+    .plant-card:hover {
+      transform: translateY(-5px); /* 上移效果 */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 阴影增强 */
+    }
+    
+    /* 植物名称样式 */
+    .plant-card h2 {
+      color: var(--primary-color); /* 颜色 */
+      margin-top: 0;               /* 上边距 */
+      margin-bottom: 15px;         /* 下边距 */
+      font-size: 1.5rem;           /* 字体大小 */
+    }
+    
+    /* 植物信息网格布局 */
+    .plant-info {
+      font-size: 14px;         /* 字体大小 */
+      display: grid;           /* 网格布局 */
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 自动填充列 */
+      gap: 10px;               /* 网格间距 */
+    }
+    
+    /* 每个信息项样式 */
+    .info-item {
+      display: flex;         /* 弹性布局 */
+      align-items: center;   /* 垂直居中 */
+    }
+    
+    /* 信息项前的小图标 */
+    .info-item::before {
+      content: "🌱";        /* 使用植物emoji */
+      margin-right: 8px;     /* 右边距 */
+    }
+    
+    /* 响应式设计 - 中等屏幕 */
+    @media (max-width: 992px) {
+      .container {
+        padding: 20px 15px; /* 调整内边距 */
+      }
+      
+      .plant-info {
+        grid-template-columns: 1fr 1fr; /* 改为两列 */
+      }
+      
+      .header-image h1 {
+        font-size: 2.5rem; /* 减小标题字体 */
+      }
+    }
+    
+    /* 响应式设计 - 小屏幕 */
+    @media (max-width: 576px) {
+      .plant-info {
+        grid-template-columns: 1fr; /* 改为单列 */
+      }
+      
+      .header-image {
+        height: 200px; /* 减小头部高度 */
+      }
+      
+      .header-image h1 {
+        font-size: 2rem; /* 进一步减小标题字体 */
+      }
+      
+      .search-box {
+        padding: 10px 15px; /* 调整搜索框内边距 */
+      }
+    }
+  </style>
+  <!-- CSS样式部分结束 -->
 </head>
 
-<!--
-background 背景
-color 颜色
-width 宽度
-height 高度
-align 对齐
-border 边框
-padding 内边距
-margin 外边距
-font 字体
-size 大小
-line 行
+<body>   
+  <!-- 页面主体 -->
+  
+  <!-- 主容器 -->
+  <div class="container">
+    <!-- 标题图片区域 -->
+    <div class="header-image">
+      <!-- 头部背景图片 -->
+      <img src="https://images.unsplash.com/photo-1534710961216-75c88202f43e" alt="植物养护">
+      <!-- 主标题 -->
+      <h1>植物养护指南</h1>
+    </div>
+    
+    <!-- 搜索框容器 -->
+    <div class="search-container">
+      <!-- 搜索输入框 -->
+      <input type="text" class="search-box" placeholder="搜索植物名称...">
+    </div>
+    
+    <!-- 植物列表主内容区 -->
+    <main class="plant-list">
+      <!-- 向日葵卡片 -->
+      <article class="plant-card">
+        <h2>向日葵</h2>
+        <div class="plant-info">
+          <div class="info-item">种植温度：15℃以上</div>
+          <div class="info-item">种植时间：南方3-4月，北方4-5月</div>
+          <div class="info-item">光照时间：每天6-8小时</div>
+          <div class="info-item">光照强度：>20000 lux</div>
+          <div class="info-item">湿度：35%-60%</div>
+          <div class="info-item">CO₂浓度：0.03%-1%</div>
+          <div class="info-item">土壤PH值：7</div>
+        </div>
+      </article>
+      
+      <!-- 留兰香薄荷卡片 -->
+      <article class="plant-card">
+        <h2>留兰香薄荷</h2>
+        <div class="plant-info">
+          <div class="info-item">种植温度：15℃以上</div>
+          <div class="info-item">种植时间：南方3-4月，北方4-5月</div>
+          <div class="info-item">光照时间：每天4-6小时</div>
+          <div class="info-item">光照强度：<5000 lux</div>
+          <div class="info-item">湿度：50%-80%</div>
+          <div class="info-item">CO₂浓度：0.03%-1%</div>
+          <div class="info-item">土壤PH值：7</div>
+        </div>
+      </article>
+      
+      <!-- 洋甘菊卡片 -->
+      <article class="plant-card">
+        <h2>洋甘菊</h2>
+        <div class="plant-info">
+          <div class="info-item">种植温度：15℃以上</div>
+          <div class="info-item">种植时间：南方3-4月，北方4-5月</div>
+          <div class="info-item">光照时间：每天6-8小时</div>
+          <div class="info-item">光照强度：5000-20000 lux</div>
+          <div class="info-item">湿度：20%-40%</div>
+          <div class="info-item">CO₂浓度：0.03%-1%</div>
+          <div class="info-item">土壤PH值：7</div>
+        </div>
+      </article>
+    </main>
+  </div>
 
--->
-
-<body>
-<div style="
-background-color:#f1f1f1;
-text-align:center;
-padding:40px;
-">
-<img src='' alt="" width="80px" height="80px"><!--图片来源：直接写网络图片链接地址 alt图片错误时显示的替代文字 宽度 高度-->
-</div><!--分开，分隔-->
-
-<div style="
-max-width:700px;
-margin:30px auto;  
-padding:15px;
-line-height:1.7;
-">
-<h1>家庭植物养护小贴士</h1><!--标题-->
-<p1>向日葵</p1><!--段落1-->
-<br /> 
-<p2>薄荷</p2><!--段落2-->
-<br /> 
-<p3>洋甘菊</p3><!--段落3-->
-</div><!--分开，分隔-->
-
-<div style="
-background-color:#f1f1f1;
-text-align:center;
-padding:40px;
-font-size:12px;
-<p>我的网站</p>
-
-"><!--分开，分隔-->
+  <!-- JavaScript脚本部分 -->
+  <script>
+    // 当DOM内容加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 获取搜索框元素
+      const searchBox = document.querySelector('.search-box');
+      // 获取所有植物卡片元素
+      const plantCards = document.querySelectorAll('.plant-card');
+      
+      // 为搜索框添加输入事件监听器
+      searchBox.addEventListener('input', function() {
+        // 获取搜索词并转为小写
+        const searchTerm = this.value.toLowerCase();
+        
+        // 遍历所有植物卡片
+        plantCards.forEach(card => {
+          // 获取植物名称并转为小写
+          const plantName = card.querySelector('h2').textContent.toLowerCase();
+          // 获取卡片全部文本内容并转为小写
+          const plantInfo = card.textContent.toLowerCase();
+          
+          // 检查植物名称或信息是否包含搜索词
+          if (plantName.includes(searchTerm) || plantInfo.includes(searchTerm)) {
+            // 如果匹配，显示卡片
+            card.style.display = 'block';
+          } else {
+            // 如果不匹配，隐藏卡片
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
 </body>
-
 </html>
-
 
 
 
